@@ -1,67 +1,103 @@
-import java.util.ArrayList;
+
+import java.util.Arrays;
 import java.util.Collections;
-import java.util.Random;
+import java.util.LinkedList;
+import java.util.List;
+import java.io.IOException;
+
 
 public class Deck {
 
-    private final String[] paloDeck = {"corazones", "diamantes", "trébol", "picas"};
-    private final String[] colorDeck = {"rojo", "negro"};
-    private final String[] valorDeck = { "2", "3", "4", "5", "6", "7", "8", "9", "10", "A", "J", "Q", "K"};
-
-    private ArrayList<Card> deck;
+    Card cartas[] = new Card[52];
+    List<Card> cardList;
 
     public Deck() {
-        deck = new ArrayList<Card>();
 
-        for (int palo = 0; palo < 2; palo++)
-            for (int valor = 0; valor < valorDeck.length; valor++)
-                deck.add(new Card(paloDeck[palo], colorDeck[0], valorDeck[valor]));
+        String color[] = {"Rojo", "Negro"};
+        String palo[] = {"Corazones", "Diamantes", "Picas", "Treboles"};
+        String valor[] = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
+        int index = 0;
 
-        for (int palo = 2; palo < 4; palo++)
-            for (int valor = 0; valor < valorDeck.length; valor++)
-                deck.add(new Card(paloDeck[palo], colorDeck[1], valorDeck[valor]));
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < 13; j++) {
+                cartas[index] = new Card();
+                cartas[index].color = color[0];
+                cartas[index].palo = palo[i];
+                cartas[index].valor = valor[j];
+                index++;
+            }
+        }
+
+        for (int i = 2; i < 4; i++) {
+            for (int j = 0; j < 13; j++) {
+                cartas[index] = new Card();
+                cartas[index].color = color[1];
+                cartas[index].palo = palo[i];
+                cartas[index].valor = valor[j];
+                index++;
+            }
+        }
+
+        cardList = new LinkedList<Card>(Arrays.asList(this.cartas));
     }
 
-    public int getSize() {
-        return deck.size();
+    public void Shuffle() {
+        Collections.shuffle(this.cardList);
+        System.out.println("Se mezclo el deck");
     }
 
-    public ArrayList<Card> getDeck() {
-        return deck;
-    }
-
-    public void shuffle() {
-        Collections.shuffle(deck);
-        System.out.println("Se mezcló el Deck.");
-        for (Object elemento : deck) {
-            //System.out.print(elemento + " / ");
+    public void Head() throws IOException {
+        try {
+            System.out.print(cardList.get(0).color + " ");
+            System.out.print(cardList.get(0).palo + " ");
+            System.out.println(cardList.get(0).valor);
+            cardList.remove(0);
+            System.out.println("Quedan " + cardList.size());
+        } catch (Exception e) {
+            System.out.println("Se han agotado las Cartas");
         }
     }
 
-    public void head(){
-        System.out.println(deck.get(0));
-        deck.remove(0);
-        System.out.println("Quedan " + deck.size() + " cartas");
+    public void Pick() throws IOException {
+        try {
+            int sacarCarta = (int) Math.floor(Math.random() * (cardList.size()));
+            System.out.print(cardList.get(sacarCarta).color + " ");
+            System.out.print(cardList.get(sacarCarta).palo + " ");
+            System.out.println(cardList.get(sacarCarta).valor);
+            cardList.remove(sacarCarta);
+            System.out.println("Quedan " + cardList.size());
+
+        } catch (Exception e) {
+            System.out.println("Se han agotado las Cartas");
+        }
     }
 
+    public void Hand() throws IOException {
+        try {
+            for (int i = 0; i < 5; i++) {
+                System.out.print(cardList.get(0).color + " ");
+                System.out.print(cardList.get(0).palo + " ");
+                System.out.println(cardList.get(0).valor);
+                cardList.remove(0);
+            }
+            System.out.println("Quedan " + cardList.size());
 
-    public void pick() {
-        Random random = new Random();
-        System.out.println(deck.get(random.nextInt(deck.size())));
-        deck.remove(random.nextInt(deck.size()));
-        System.out.println("Quedan " + deck.size() + " cartas");
+        } catch (Exception e) {
+            System.out.println("Se han agotado las Cartas");
+        }
     }
 
-    public void hand() {
-        for(int i=0; i<=4; i++){
-            System.out.println(deck.get(i));
+    public void Imprimir() throws IOException {
+        try {
+            for (int i = 0; i < cardList.size(); i++) {
+                System.out.print(cardList.get(i).color + " ");
+                System.out.print(cardList.get(i).palo + " ");
+                System.out.println(cardList.get(i).valor);
+            }
+        } catch (Exception e) {
+            System.out.println("Se han agotado las Cartas");
         }
-        for(int i=0; i<=4; i++){
-            deck.remove(i);
-        }
-        System.out.println("Quedan " + deck.size()+ " cartas");
     }
 
 
 }
-
